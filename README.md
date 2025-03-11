@@ -1,5 +1,6 @@
-# DeepARG: DeepARG: An Explainable Machine Learning-based Intelligent System for Microbial Resistance Gene Identification
-
+# DeepARG: 可解释机器学习的微生物抗性基因智能识别系统
+### DeepARG: An Explainable Machine Learning-based Intelligent System for Microbial Resistance Gene 
+Identification
 ![DeepARG Workflow](src/figure/figure.png)
 
 ## 📖 项目简介
