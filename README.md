@@ -1,10 +1,10 @@
-# DeepARG: 可解释机器学习的微生物抗性基因智能识别系统
-### DeepARG: An Explainable Machine Learning-based Intelligent System for Microbial Resistance Gene 
+# DeepMSRB: 可解释机器学习的微生物抗逆元件智能识别系统
+### DeepMSRB: An Explainable Machine Learning-based Intelligent System for Microbial Resistance Gene 
 Identification
 ![DeepARG Workflow](src/figure/figure.png)
 
 ## 📖 项目简介
-DeepARG是基于深度学习的微生物抗性基因识别系统，创新性地解决了以下行业痛点：
+DeepMSRB是基于深度学习与机器学习双模型协同预测微生物抗逆元件的工具，创新性地解决了以下行业痛点：
 - **传统方法依赖实验验证**：湿实验验证周期长（3-6个月/基因）
 - **现有算法可解释性差**：无法追溯预测结果的生物学依据
 - **多平台兼容性差**：缺乏统一的分析工作流
@@ -25,7 +25,8 @@ DeepARG是基于深度学习的微生物抗性基因识别系统，创新性地�
 | 模块                | 技术实现                     |
 | ------------------- | ---------------------------- |
 | 工作流管理          | Snakemake DAG引擎            |
-| 深度学习（CNN）预测 | Tensorflow架构               |
+| 深度学习（MLP）预测 | Tensorflow架构               |
+| 机器学习（LGBM）预测 | Scikit-learn库              |
 | GO注释              | DeepGOPlus(卷积神经网络注释) |
 | 序列处理            | SeqKit高效处理               |
 |                     |                              |
@@ -44,13 +45,13 @@ DeepARG是基于深度学习的微生物抗性基因识别系统，创新性地�
 ```bash
 # 克隆仓库
 git clone https://github.com/XT33KAKA/DeepARG.git
-cd DeepARG
+cd DeepMSRB
 
 # 创建Conda环境
 conda env create -f environment.yml
 
 # 激活环境
-conda activate DeepARG
+conda activate DeepMSRB
 
 # 安装核心脚本到系统路径
 sudo cp src/work_script/* /usr/local/bin/
@@ -65,7 +66,7 @@ pip install snakemake==7.22
 
 ```bash
 # 进入环境
-conda activate DeepARG_env
+conda activate DeepMSRB_env
 
 #使用流程
 snakemake -s workflow -c {线程数} -p --use-conda 
@@ -75,7 +76,7 @@ snakemake -s workflow -c {线程数} -p --use-conda
 ## 📂 目录结构
 
 ```bash
-DeepARG/
+DeepMSRB/
 ├── config/              # 配置文件
 ├── model/               # 模型存储
 ├── result/              # 输出结果
