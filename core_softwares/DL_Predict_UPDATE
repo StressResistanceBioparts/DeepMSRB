@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+
+import argparse
+import pandas as pd
+import numpy as np
+from Bio import SeqIO
+from Bio.SeqRecord import SeqRecord
+from Bio.Seq import Seq
+from propythia.protein.sequence import ReadSequence
+from propythia.protein.descriptors import ProteinDescritors
+from tensorflow.keras.models import load_model
+from tensorflow.keras.utils import plot_model
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import GenericUnivariateSelect
+from sklearn.feature_selection import f_classif, mutual_info_classif, chi2
+import colorama
+from colorama import Fore, Style
+
+
+
+ascii_art = """
+Developed by Synthetic Biology Laboratory, Xinjiang University
+Developer, Xu Tong, Ma Xiaoyun
+"""
+
+def process_batch(batch, model):
+    # Create DataFrame
+    nb = pd.DataFrame(batch, columns=["ID", "sequence", 'label'])
+    
+    # Preprocess sequences
+    read_seqs = ReadSequence()
+    res = read_seqs.par_preprocessing(dataset= nb, col = 'sequence', B ='N', Z = 'Q', U = 'C', O = 'K', J = 'I', X = '') 
+
+    # Compute descriptors
+    descriptors_res = ProteinDescritors(dataset= res ,  col= 'sequence')
+    # res = descriptors_res.get_all_physicochemical(ph=7, amide=False, n_jobs=2)
+    functions_to_calculate = [24,30] 
+    res = descriptors_res.get_adaptable(list_of_functions = functions_to_calculate,n_jobs=20)
+
+    # Handle descriptors data
+    res2 = res.loc[:, (res != 0).any()]
+    res2 = res2.loc[:, ~res2.T.duplicated(keep='first')]
+
+    # Prepare features and labels
+    x = res2.drop(columns=['ID','sequence','label'])
+    y = res2['label']
+    scaler = StandardScaler().fit(x)
+    x = scaler.transform(x)
+    
+    # Feature selection
+    transformer = GenericUnivariateSelect(mutual_info_classif, mode='percentile', param=50).fit(x, y)
+    x = transformer.transform(x)
+    
+    # Prediction
+    # 有任何改动,记得加批注以及修改时间!  （0.5）
+    #2025.6.23，置信度改为0.9
+    #2025.6.24,挖质粒置信度改为0.6
+    predictions = model.predict(x)
+    predicted_classes = (predictions > 0.9).astype("int32")
+    
+    # Filter predictions
+    predicted_classes_df = pd.DataFrame(predicted_classes, columns=['Prediction'], index=res.index)
+    predicted_classes_one = predicted_classes_df[predicted_classes_df['Prediction'] == 1]
+    
+    # Create final DataFrame
+    final_df = res.loc[predicted_classes_one.index, ['ID', 'sequence']]
+    return final_df
+
+def save_merged_df_as_fasta(merged_df, output_file):
+    with open(output_file, 'w') as f:
+        for _, row in merged_df.iterrows():
+            seq_id = row['ID']
+            sequence = row['sequence']
+            record_id = f"{seq_id}"  # Prediction is 1
+            record = SeqRecord(Seq(sequence), id=record_id, description="")
+            SeqIO.write(record, f, "fasta")
+
+def main():
+    colorama.init(autoreset=True)
+    print(Fore.MAGENTA + Style.BRIGHT + ascii_art) 
+
+    parser = argparse.ArgumentParser(description='Predict tolerance elements from protein sequences.')
+    parser.add_argument('-i', '--input', required=True, help='Input FASTA file containing protein sequences.')
+    parser.add_argument('-o', '--output', required=True, help='Output file path for predicted sequences.')
+    args = parser.parse_args()
+
+    best_model = load_model('/home/map/DL/ML_Element_Recognize/DL_test/notebook/models/Sequential_discript_best_model_2025-01-14_12-12-50.h5')
+
+    batch_size = 600 # Adjust batch size based on your memory constraints
+    batch = []
+    final_results = []
+
+    for record in SeqIO.parse(args.input, "fasta"):
+        batch.append([record.id, str(record.seq), " "])
+        if len(batch) >= batch_size:
+            batch_results = process_batch(batch, best_model)
+            final_results.append(batch_results)
+            batch = []
+
+    # Process remaining records
+    if batch:
+        batch_results = process_batch(batch, best_model)
+        final_results.append(batch_results)
+
+    # Concatenate results
+    final_df = pd.concat(final_results, ignore_index=True)
+
+    # Save results
+    save_merged_df_as_fasta(final_df, args.output)
+
+    print(f"Predicted sequences saved to {args.output}")
+
+if __name__ == "__main__":
+    main()
