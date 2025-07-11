@@ -44,7 +44,8 @@ DeepMSRB是基于深度学习与机器学习双模型协同预测微生物抗逆
 ### 环境部署
 ```bash
 # 克隆仓库
-git clone https://github.com/XT33KAKA/DeepARG.git
+git clone https://github.com/StressResistanceBioparts/DeepMSRB.git)
+
 cd DeepMSRB
 
 # 创建Conda环境
@@ -58,6 +59,22 @@ sudo cp src/work_script/* /usr/local/bin/
 
 # 安装snakemake
 pip install snakemake==7.22
+
+# 将`core_softwares`目录添加到`PATH`环境变量中
+
+nano ~/.bashrc
+# 或者
+nano ~/.zshrc
+# 在文件的末尾，添加以下行，将core_softwares目录添加到PATH变量中：
+
+export PATH="$PATH:/path/to/your/project/core_softwares"
+
+#替换/path/to/your/project为你实际的路径。
+
+source ~/.bashrc   # 如果是bash
+source ~/.zshrc    # 如果是zsh
+
+
 ```
 
 ## 📈 使用指南
