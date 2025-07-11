@@ -1,5 +1,5 @@
 # DeepMSRB: 可解释机器学习的微生物抗逆元件智能识别系统
-### DeepMSRB: An Explainable Machine Learning-based Intelligent System for Microbial Stress Resistance Bioparts![Uploading image.png…]()
+### DeepMSRB: An Explainable Machine Learning-based Intelligent System for Microbial Stress Resistance Bioparts
 
 Identification
 ![DeepARG Workflow](src/figure/figure.png)
