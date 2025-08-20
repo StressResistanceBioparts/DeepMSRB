@@ -2,7 +2,7 @@
 ### DeepMSRB: An Explainable Machine Learning-based Intelligent System for Microbial Stress Resistance Bioparts
 
 Identification
-![DeepARG Workflow](src/figure/figure.png)
+![DeepARG Workflow](src/figure/Figure-1.png)
 
 ## 📖 项目简介
 DeepMSRB是基于深度学习与机器学习双模型协同预测微生物抗逆元件的工具，创新性地解决了以下行业痛点：
