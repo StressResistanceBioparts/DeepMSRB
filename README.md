@@ -1,32 +1,33 @@
-# DeepMSRB: 可解释机器学习的微生物抗逆元件智能识别系统
-### DeepMSRB: An Explainable Machine Learning-based Intelligent System for Microbial Stress Resistance Bioparts
+# DeepMSRB: 基于机器学习的微生物抗逆元件智能识别系统
+### DeepMSRB: Intelligent recognition system for microbial stress resistance bioparts based on machine learning
 
 Identification
 ![DeepARG Workflow](src/figure/Figure-1.png)
 
 ## 📖 项目简介
-DeepMSRB是基于深度学习与机器学习双模型协同预测微生物抗逆元件的工具，创新性地解决了以下行业痛点：
+DeepMSRB是基于预训练蛋白质语言模型Prot_bert特征提取，使用LGBM模型预测微生物抗逆元件的工具，创新性地解决了以下行业痛点：
 - **传统方法依赖实验验证**：湿实验验证周期长（3-6个月/基因）
-- **现有算法可解释性差**：无法追溯预测结果的生物学依据
+- **适用泛化性**：仅针对单一物种组学，元件多样性不足。
 - **多平台兼容性差**：缺乏统一的分析工作流
 
 技术亮点：
 
-1. 🧠 基于TensorFlow构建深度神经网络模型
+1. 🧠 基于蛋白质预训练大模型提取特征
 2. ⚙️ 采用Snakemake构建标准化分析流程
-3. 🎯二次筛选候选结果
+3. 🎯通过GO功能定位，二次筛选候选结果
 
 ## 🛠️ 技术架构
 ![Tech Stack](https://img.shields.io/badge/Python-3.8%2B-blue)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.6-orange)
+![Pytorch](https://pytorch.org)
 ![SHAP](https://img.shields.io/badge/SHAP-0.41.0-red)
 ![Bioconda](https://img.shields.io/badge/Bioconda-DeepGOPlus-green)
+![Prot_bert]([https://huggingface.co/Rostlab/prot_bert)
 
 核心技术组件：
 | 模块                | 技术实现                     |
 | ------------------- | ---------------------------- |
 | 工作流管理          | Snakemake DAG引擎            |
-| 深度学习（MLP）预测 | Tensorflow架构               |
+| 深度学习（Prot_bert）预测 | Pytorch架构               |
 | 机器学习（LGBM）预测 | Scikit-learn库              |
 | GO注释              | DeepGOPlus(卷积神经网络注释) |
 | 序列处理            | SeqKit高效处理               |
