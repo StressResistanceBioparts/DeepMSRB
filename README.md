@@ -21,7 +21,7 @@ DeepMSRB是基于预训练蛋白质语言模型Prot_bert特征提取，使用LGB
 ![Pytorch](https://pytorch.org)
 ![SHAP](https://img.shields.io/badge/SHAP-0.41.0-red)
 ![Bioconda](https://img.shields.io/badge/Bioconda-DeepGOPlus-green)
-![Prot_bert]([https://huggingface.co/Rostlab/prot_bert)
+![Prot_bert](https://huggingface.co/Rostlab/prot_bert)
 
 核心技术组件：
 | 模块                | 技术实现                     |
